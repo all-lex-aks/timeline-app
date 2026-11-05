@@ -1,0 +1,36 @@
+{
+  "name": "timeline-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "start": "webpack serve --mode development",
+    "test": "jest"    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/all-lex-aks/timeline-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  
+  "bugs": {
+    "url": "https://github.com/all-lex-aks/timeline-app/issues"
+  },
+  "homepage": "https://github.com/all-lex-aks/timeline-app#readme",
+  "devDependencies": {
+    "@babel/core": "^8.1.0",
+    "@babel/preset-env": "^8.0.7",
+    "babel-jest": "^30.5.2",
+    "babel-loader": "^10.1.1",
+    "css-loader": "^7.1.5",
+    "html-webpack-plugin": "^5.6.8",
+    "jest": "^30.5.2",
+    "mini-css-extract-plugin": "^2.10.2",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1",
+    "webpack-dev-server": "^6.1.0"
+  }
+}

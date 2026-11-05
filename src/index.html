@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeline</title>
+</head>
+<body>
+    <div class="timeline-container">
+        <div id="timeline" class="timeline">
+            <!-- Посты будут добавляться сюда -->
+        </div>
+        
+        <!-- Поле ввода и управления -->
+        <div class="input-area">
+            <!-- Обычный режим -->
+            <form id="post-form" class="ui-state">
+                <input type="text" id="post-text" placeholder="Введите текст записи и нажмите Enter" autocomplete="off">
+                <div class="controls">
+                    <button type="button" id="start-audio" class="btn-icon" title="Записать аудио">🎤</button>
+                    <button type="button" id="start-video" class="btn-icon" title="Записать видео">📹</button>
+                </div>
+            </form>
+
+            <!-- Режим записи -->
+            <div id="recording-form" class="ui-state hidden">
+                <button type="button" id="stop-record" class="btn-icon btn-success" title="Готово">✓</button>
+                <span id="timer" class="timer">00:00</span>
+                <button type="button" id="cancel-record" class="btn-icon btn-danger" title="Отмена">✕</button>
+            </div>
+        </div>
+        
+        <!-- Превью для видео (скрыто по умолчанию) -->
+        <div id="video-preview-container" class="hidden">
+            <video id="video-preview" autoplay muted></video>
+        </div>
+    </div>
+
+    <!-- Модальное окно для ввода координат (остаётся без изменений) -->
+    <div id="coords-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Что-то пошло не так</h2>
+            </div>
+            <div class="modal-body">
+                <p>К сожалению, нам не удалось определить ваше местоположение. Пожалуйста, дайте разрешение на использование геолокации либо введите координаты вручную.</p>
+                <p><b>Широта и долгота через запятую</b></p>
+                <input type="text" id="manual-coords" placeholder="51.50851, -0.12572">
+                <div id="modal-error" class="error-text"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-coords" class="btn btn-secondary">Отмена</button>
+                <button id="save-coords" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

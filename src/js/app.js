@@ -29,6 +29,7 @@ let recordedChunks = [];
 let timerInterval = null;
 let secondsRecorded = 0;
 let currentRecordingType = null; // 'audio' или 'video'
+let isRecordingCancelled = false;
 
 // --- 1. Обработка текстовых сообщений ---
 postForm.addEventListener('submit', (e) => {
@@ -48,6 +49,8 @@ stopRecordBtn.addEventListener('click', () => stopRecording(true));
 cancelRecordBtn.addEventListener('click', () => stopRecording(false));
 
 async function startRecording(type) {
+    isRecordingCancelled = false;
+    pendingContent = null;
     currentRecordingType = type;
     recordedChunks = [];
 
@@ -72,13 +75,15 @@ async function startRecording(type) {
             // Останавливаем все треки камеры/микрофона
             mediaStream.getTracks().forEach(track => track.stop());
             
-            if (pendingContent.type !== 'cancelled') {
-                // Создаем Blob из записанных кусочков
+            if (!isRecordingCancelled) {
                 const mimeType = type === 'audio' ? 'audio/webm' : 'video/webm';
                 const blob = new Blob(recordedChunks, { type: mimeType });
                 pendingContent = { type: type, text: null, blob: blob };
-                requestGeolocation(); // Запрашиваем координаты после записи
+                requestGeolocation(); 
+            } else {
+                resetUI();
             }
+
         };
 
         // Меняем UI
@@ -102,15 +107,12 @@ async function startRecording(type) {
 }
 
 function stopRecording(isConfirm) {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-        if (!isConfirm) {
-            pendingContent = { type: 'cancelled' }; // Отмечаем, что отменили
-        }
-        mediaRecorder.stop();
+    if (!isConfirm) {
+        isRecordingCancelled = true; // <--- СТАВИМ ФЛАГ ОТМЕНЫ
     }
     
-    if (isConfirm && pendingContent && pendingContent.type !== 'cancelled') {
-        // Флаг, что мы ждем onstop для создания блоба
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop(); // Это вызовет onstop
     } else {
         resetUI();
     }

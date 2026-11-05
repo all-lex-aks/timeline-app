@@ -192,29 +192,33 @@ function createPost(content, coords) {
     const now = new Date();
     const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth()+1).padStart(2, '0')}.${String(now.getFullYear()).slice(2)} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-    let contentHTML = '';
+    // 1. Создаем шапку поста (дата)
+    const headerEl = document.createElement('div');
+    headerEl.className = 'post-header';
+    headerEl.innerHTML = `<span>${dateStr}</span>`; // Здесь безопасно, дата генерируется нами
+    postEl.appendChild(headerEl);
 
+    // 2. Создаем контент (текст или медиа)
     if (content.type === 'text') {
-        contentHTML = `<div class="post-text">${content.text}</div>`;
+        const textEl = document.createElement('div');
+        textEl.className = 'post-text';
+        // ВАЖНО: используем textContent, чтобы браузер не парсил HTML-теги
+        textEl.textContent = content.text; 
+        postEl.appendChild(textEl);
     } else if (content.type === 'audio' || content.type === 'video') {
-        // Создаем URL для блоба
-        const mediaUrl = URL.createObjectURL(content.blob);
-        if (content.type === 'audio') {
-            contentHTML = `<audio class="post-media" controls src="${mediaUrl}"></audio>`;
-        } else {
-            contentHTML = `<video class="post-media" controls src="${mediaUrl}"></video>`;
-        }
+        const mediaEl = document.createElement(content.type); // создаем <audio> или <video>
+        mediaEl.className = 'post-media';
+        mediaEl.controls = true;
+        mediaEl.src = URL.createObjectURL(content.blob);
+        postEl.appendChild(mediaEl);
     }
 
-    postEl.innerHTML = `
-        <div class="post-header">
-            <span>${dateStr}</span>
-        </div>
-        ${contentHTML}
-        <div class="post-coords">
-            [${coords.lat}, ${coords.lon}] 👁️
-        </div>
-    `;
+    // 3. Создаем блок с координатами
+    const coordsEl = document.createElement('div');
+    coordsEl.className = 'post-coords';
+    coordsEl.textContent = `[${coords.lat}, ${coords.lon}] 👁️`;
+    postEl.appendChild(coordsEl);
 
+    // Добавляем готовый пост в начало ленты
     timeline.prepend(postEl);
 }

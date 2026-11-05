@@ -32,6 +32,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+
 permissions:
   contents: read
   pages: write
